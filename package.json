@@ -9,8 +9,7 @@
   "dependencies": {
     "express": "^4.6.0",
     "spooky": "^0.2.4",
-    "ws": "^0.4.31",
-    "casper-node": "git+https://github.com/leesei/heroku-casper-node.git"
+    "ws": "^0.4.31"
   },
   "engines": {
     "node": "0.10.x"
