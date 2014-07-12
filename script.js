@@ -12,7 +12,7 @@ ws.onopen = function() {
     }))
 }
 ws.onmessage = function(event) {
-	var li = document.createElement('li')
-	li.innerText = event.data
-	document.querySelector('#pings').appendChild(li)
+	var img = document.createElement('img')
+	img.src = event.data
+	document.querySelector('#pings').appendChild(img)
 }

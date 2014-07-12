@@ -48,31 +48,32 @@ wss.on("connection", function(ws) {
 	})
 
 	function getSimilar(input, seen) {
-		Scraper.getSimilar(input, function(similar) {
-			dups = dups || []
+		Scraper.getSimilar(input, function gotResults(similar) {
+			console.log("Scraped %s", input.img)
 			for (var i = 0; i <= similar.length; i++) {
 				if (i == similar.length) {
 					onNoResults()
 					return
 				}
 				var img = similar[i]
+				console.log(img);
 				if (seen[img]) continue
 				input.img = img
 				break
 			}
 			seen[input.img] = true
+			console.log("sending this result: %s", input.img)
+			ws.send(input.img)
+		}, function gotDups(dups) {
+			console.log("adding dups")
 			dups.forEach(function(d) {
 				seen[d] = true
 			})
+		}, function onComplete() {
 			timeoutID = setTimeout(function() {
+				console.log("getting results")
 				getSimilar(input, seen)
 			}, SEARCH_DELAY)
-			console.log("Scraped %s", input.img)
-			ws.send(input.img)
-		}, function (dups) {
-			dups.forEach(function(d) {
-				seen[d] = true
-			})
 		})
 
 

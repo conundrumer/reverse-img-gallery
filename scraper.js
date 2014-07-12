@@ -15,7 +15,7 @@ var test_dups = [
 ]
 
 var Scraper = {}
-Scraper.getSimilar = function(input, gotResults, gotDups) {
+Scraper.getSimilar = function(input, gotResults, gotDups, onComplete) {
 	var imgseed = input.img
 	var omitdups = input.omitdups || false
 	var similarUrl, dupUrl, similar, dups
@@ -80,7 +80,11 @@ Scraper.getSimilar = function(input, gotResults, gotDups) {
 				});
 				this.emit('similar', similar)
 				// this.emit('hello', similar[10] + ", length: " + similar.length)
-				this.open(dupUrl.href)
+				if (!dupUrl) {
+					this.bypass(1);
+				} else {
+					this.open(dupUrl.href)
+				}
 			})
 			spooky.then(function() {
 				// this.capture("similar.png")
@@ -102,7 +106,7 @@ Scraper.getSimilar = function(input, gotResults, gotDups) {
 
 	spooky.on('similar', function(s) {
 		console.log("got similar: ", s[0]);
-		gotResults(similar)
+		gotResults(s)
 	})
 
 	spooky.on('dups', function(d) {
@@ -130,6 +134,7 @@ Scraper.getSimilar = function(input, gotResults, gotDups) {
 	spooky.on('run.complete', function() {
 		console.log("FINISH");
 		spooky.destroy();
+		onComplete();
 	})
 }
 
