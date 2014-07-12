@@ -43,7 +43,7 @@ wss.on("connection", function(ws) {
 
 		} catch (e) {
 			console.log(e);
-			console.log('%s is not json', message)
+			console.log('"%s" is not json', message)
 		}
 	})
 
@@ -73,11 +73,13 @@ wss.on("connection", function(ws) {
 			timeoutID = setTimeout(function() {
 				getSimilar(input, seen)
 			}, SEARCH_DELAY)
+			console.log("Scraped %s", input.img)
 			ws.send(input.img)
 		}
 	}
 
 	function onNoResults() {
-		ws.send("no more results")
+		console.log("No more results")
+		ws.send("No more results")
 	}
 })
