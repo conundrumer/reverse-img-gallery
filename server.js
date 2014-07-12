@@ -18,7 +18,7 @@ var wss = new WebSocketServer({
 })
 console.log("websocket server created")
 
-var SEARCH_DELAY = 5000;
+var SEARCH_DELAY = 100;
 var testimg = "http://static5.eurotriptips.com/wp-content/uploads/2012/10/1-IMG_2546.jpg"
 
 // for each connection
@@ -48,7 +48,7 @@ wss.on("connection", function(ws) {
 	})
 
 	function getSimilar(input, seen) {
-		Scraper.getSimilar(input, function(similar, dups) {
+		Scraper.getSimilar(input, function(similar) {
 			dups = dups || []
 			for (var i = 0; i <= similar.length; i++) {
 				if (i == similar.length) {
@@ -69,6 +69,10 @@ wss.on("connection", function(ws) {
 			}, SEARCH_DELAY)
 			console.log("Scraped %s", input.img)
 			ws.send(input.img)
+		}, function (dups) {
+			dups.forEach(function(d) {
+				seen[d] = true
+			})
 		})
 
 
